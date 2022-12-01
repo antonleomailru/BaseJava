@@ -5,6 +5,7 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
 
     void clear() {
+        //test Git now
     }
 
     void save(Resume r) {
