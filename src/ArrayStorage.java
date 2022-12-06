@@ -1,68 +1,56 @@
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    int currentIndex = -1;
 
     void clear() {
-        int i  = 0;
-        while (i < storage.length && storage[i] != null) {
+        for (int i =0; i <= currentIndex; i++) {
             storage[i] = null;
         }
+        currentIndex = -1;
     }
 
     void save(Resume r) {
-        int i  = 0;
-        while (i < storage.length && storage[i] != null) {
-            i++;
-        }
-        storage[i] = r;
+        currentIndex++;
+        storage[currentIndex] = r;
     }
 
     Resume get(String uuid) {
         int i  = 0;
-        while (i < storage.length && storage[i] != null && storage[i].uuid != uuid) {
+        while (i <= currentIndex && !storage[i].uuid.equals(uuid)) {
             i++;
         }
-        return storage[i];
+        if (i == currentIndex + 1)
+            return null;
+        else
+            return storage[i];
     }
 
     void delete(String uuid) {
         int i  = 0;
-        while (i < storage.length && storage[i] != null && storage[i].uuid != uuid) {
+        while (i <= currentIndex && !storage[i].uuid.equals(uuid)) {
             i++;
         }
-        int j  = 0;
-        while (j < storage.length - 1 && storage[i] != null) {
-            storage[i] = storage[i+1];
-            i++;
+        if (i != currentIndex + 1) {
+            for (int j = i; j < currentIndex; j++)
+                storage[j] = storage[j + 1];
+            storage[currentIndex] = null;
+            currentIndex--;
         }
-        storage[i] = null;
-
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        int i  = 0;
-        while (i < storage.length && storage[i] != null) {
-            i++;
-        }
-        Resume[] stor = new Resume[i];
-        int j  = 0;
-        while (j <= i-1) {
-            stor[j] = storage[j];
-            j++;
-        }
-        return stor;
+        return Arrays.copyOf(storage,currentIndex + 1);
     }
 
     int size() {
-        int i  = 0;
-        while (i < storage.length && storage[i] != null) {
-            i++;
-        }
-        return i;
+        return currentIndex + 1;
     }
 }
