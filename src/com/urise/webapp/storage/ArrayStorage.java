@@ -1,12 +1,15 @@
 package com.urise.webapp.storage;
+
 import com.urise.webapp.model.Resume;
+
 import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    int sizeOfStorage = 0;
+    private int sizeOfStorage = 0;
 
     Boolean find(String uuid) {
         for (int i = 0; i < sizeOfStorage; i++) {
@@ -26,7 +29,7 @@ public class ArrayStorage {
         return null;
     }
 
-    public void update(String uuid, String newUuid)  {
+    public void update(String uuid, String newUuid) {
         if (find(uuid)) {
             storage[findPosition(uuid)].setUuid(newUuid);
         } else {
