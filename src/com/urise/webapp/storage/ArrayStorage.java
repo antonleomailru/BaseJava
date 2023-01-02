@@ -1,3 +1,5 @@
+package com.urise.webapp.storage;
+import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 /**
  * Array based storage for Resumes
@@ -8,7 +10,7 @@ public class ArrayStorage {
 
     Boolean find(String uuid) {
         for (int i = 0; i < sizeOfStorage; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return true;
             }
         }
@@ -17,32 +19,32 @@ public class ArrayStorage {
 
     Integer findPosition(String uuid) {
         for (int i = 0; i < sizeOfStorage; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return (i);
             }
         }
         return null;
     }
 
-    void update(String uuid, String newUuid)  {
+    public void update(String uuid, String newUuid)  {
         if (find(uuid)) {
-            storage[findPosition(uuid)].uuid = newUuid;
+            storage[findPosition(uuid)].setUuid(newUuid);
         } else {
-            System.out.println("Resume: " + uuid + " not find");
+            System.out.println("com.urise.webapp.model.Resume: " + uuid + " not find");
         }
     }
 
 
-    void clear() {
+    public void clear() {
         for (int i = 0; i < sizeOfStorage; i++) {
             storage[i] = null;
         }
         sizeOfStorage = 0;
     }
 
-    void save(Resume r) {
-        if (find(r.uuid)) {
-            System.out.println("Resume: " + r.uuid + " alredy exist");
+    public void save(Resume r) {
+        if (find(r.getUuid())) {
+            System.out.println("com.urise.webapp.model.Resume: " + r.getUuid() + " alredy exist");
         } else if (sizeOfStorage == 10000) {
             System.out.println("Storage OverFlow");
         } else {
@@ -51,36 +53,36 @@ public class ArrayStorage {
         }
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         if (find(uuid)) {
             for (Resume r : storage) {
-                if (r == null || r.uuid == uuid) return r;
+                if (r == null || r.getUuid() == uuid) return r;
             }
         } else {
-            System.out.println("Resume: " + uuid + " not find");
+            System.out.println("com.urise.webapp.model.Resume: " + uuid + " not find");
         }
         return null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         if (find(uuid)) {
             for (int i = 0; i < sizeOfStorage; i++) {
-                if (storage[i].uuid.equals(uuid)) {
+                if (storage[i].getUuid().equals(uuid)) {
                     sizeOfStorage--;
                     storage[i] = storage[sizeOfStorage];
                     storage[sizeOfStorage] = null;
                 }
             }
         } else {
-            System.out.println("Resume: " + uuid + " not exists");
+            System.out.println("com.urise.webapp.model.Resume: " + uuid + " not exists");
         }
     }
 
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, sizeOfStorage);
     }
 
-    int size() {
+    public int size() {
         return sizeOfStorage;
     }
 }
