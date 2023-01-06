@@ -6,72 +6,71 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
-    private int sizeOfStorage = 0;
+    private final int STORAGE_LIMIT = 10000;
+    Resume[] storage = new Resume[STORAGE_LIMIT];
+    private int size = 0;
 
-     Integer findPosition(String uuid) {
-        for (int i = 0; i < sizeOfStorage; i++) {
+     private Integer getIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                return (i);
+                return i;
             }
         }
         return -1;
     }
 
-    public void update(String uuid, String newUuid) {
-        Integer pos = findPosition(uuid);
-        if (pos != -1) {
-            storage[pos].setUuid(newUuid);
-        } else {
-            System.out.println("com.urise.webapp.model.Resume: " + uuid + " not find");
-        }
+    public void update(Resume r) {
+         Integer index = getIndex(r.getUuid());
+             if (index != -1) {
+                 storage[index] = r;
+             } else {
+                 System.out.println("Resume: " + r.getUuid() + " not find");
+             }
+
     }
 
     public void clear() {
-        for (int i = 0; i < sizeOfStorage; i++) {
-            storage[i] = null;
-        }
-        sizeOfStorage = 0;
+        Arrays.fill(storage,0, size-1,null);
+        size = 0;
     }
 
     public void save(Resume r) {
-        if (findPosition(r.getUuid()) != -1) {
-            System.out.println("com.urise.webapp.model.Resume: " + r.getUuid() + " alredy exist");
-        } else if (sizeOfStorage == storage.length) {
+        if (getIndex(r.getUuid()) != -1) {
+            System.out.println("Resume: " + r.getUuid() + " alredy exist");
+        } else if (size == storage.length) {
             System.out.println("Storage OverFlow");
         } else {
-            storage[sizeOfStorage] = r;
-            sizeOfStorage++;
+            storage[size] = r;
+            size++;
         }
     }
 
     public Resume get(String uuid) {
-        if (findPosition(uuid) != -1) {
-            for (Resume r : storage) {
-                if (r == null || r.getUuid() == uuid) return r;
-            }
+        if (getIndex(uuid) != -1) {
+            return storage[getIndex(uuid)];
+
         } else {
-            System.out.println("com.urise.webapp.model.Resume: " + uuid + " not find");
+            System.out.println("Resume: " + uuid + " not find");
         }
         return null;
     }
 
     public void delete(String uuid) {
-        Integer pos = findPosition(uuid);
-        if (pos != -1) {
-            sizeOfStorage--;
-            storage[pos] = storage[sizeOfStorage];
-            storage[sizeOfStorage] = null;
+        Integer index = getIndex(uuid);
+        if (index != -1) {
+            size--;
+            storage[index] = storage[size];
+            storage[size] = null;
         } else {
-            System.out.println("com.urise.webapp.model.Resume: " + uuid + " not exists");
+            System.out.println("Resume: " + uuid + " not exists");
         }
     }
 
     public Resume[] getAll() {
-        return Arrays.copyOf(storage, sizeOfStorage);
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
-        return sizeOfStorage;
+        return size;
     }
 }
